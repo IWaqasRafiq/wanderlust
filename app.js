@@ -12,7 +12,7 @@ app.use(express.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "/views"));
 
-const mongoUrl = "mongodb+srv://wm66179:saifmalik28@cluster0.ti04esi.mongodb.net/crud?retryWrites=true&w=majority";
+const mongoUrl = "mongodb+srv://@cluster0.ti04esi.mongodb.net/?retryWrites=true&w=majority";
 mongoose.connect(mongoUrl);
 
 app.get("/", (req , res) =>{
