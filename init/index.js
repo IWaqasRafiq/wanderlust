@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Listing = require("../models/listing.js");
 const initData = require("./data.js");
 
-const mongoUrl = "mongodb+srv://wm66179:saifmalik28@cluster0.ti04esi.mongodb.net/crud?retryWrites=true&w=majority";
+const mongoUrl = "mongodb+srv://@cluster0.ti04esi.mongodb.net/?retryWrites=true&w=majority";
 mongoose.connect(mongoUrl);
 
 const initDB = async () => {
