@@ -8,6 +8,7 @@ const ejsMate = require("ejs-mate");
 const ExpressError = require("./utils/expressError.js");
 const listings = require("./routes/listings.js");
 const reviews = require("./routes/review.js");
+const user = require("./routes/user.js");
 const session = require("express-session");
 const flash = require('connect-flash');
 const passport = require("passport");
@@ -23,15 +24,20 @@ app.engine("ejs", ejsMate);
 app.use(express.static(path.join(__dirname, "/public")));
 
 const mongoUrl =
-  "mongodb+srv://@cluster0.ti04esi.mongodb.net";
+  "mongodb+srv://wm66179:saifmalik28@cluster0.ti04esi.mongodb.net/crud?retryWrites=true&w=majority";
 mongoose.connect(mongoUrl);
 
-
 const sessionOptions = {
-  secret: "keyboard cat",
+  secret: "keyboardcat",
   resave: false,
   saveUninitialized: true,
+    cookie: {
+    secure: true,
+    httpOnly: true,
+    expires: new Date(Date.now() + 60 * 60 * 1000) 
+  }
 };
+
 
 app.get("/", (req, res) => {
   res.send("Root is working.");
@@ -39,20 +45,38 @@ app.get("/", (req, res) => {
 
 app.use(session(sessionOptions));
 app.use(flash());
+app.use(passport.initialize()); 
+app.use(passport.session());  
 
 passport.use(new LocalStrategy(User.authenticate()));
 
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
 
-app.use((req, res, next)=>{
+passport.deserializeUser((id, done) => {
+  User.findById(id, (err, user) => {
+    done(err, user);
+  });
+});
+
+
+app.use((req, res, next) => {
   res.locals.success = req.flash("success");
+  res.locals.error = req.flash("error");
+  res.locals.currUser =  req.user;
   next();
-})
+});
 
+app.get("/test", (req, res) => {
+  req.flash('success', 'Flash message test!');
+    console.log(req.flash('success')); // Should show array with the message
+  res.redirect('/');
+});
 
 app.use("/listings", listings);
 app.use("/listings/:id/reviews", reviews);
+app.use("/", user);
 
 app.all("/{*any}", (req, res, next) => {
   next(new ExpressError(404, "Page Not Found"));
