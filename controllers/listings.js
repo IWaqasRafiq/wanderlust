@@ -16,7 +16,7 @@ module.exports.showListing = async (req, res) => {
       .populate("owner");
     console.log(listing);
 
-    res.render("listing/show.ejs", { listing });
+    return res.render("listing/show.ejs", { listing });
   };
 
 module.exports.createListing = async (req, res, next) => {
@@ -28,7 +28,7 @@ module.exports.createListing = async (req, res, next) => {
     newListing.image = { url, filename };
     await newListing.save();
     req.flash("success", "New Listing Created!");
-    res.redirect("/listings");
+    return res.redirect("/listings");
   };
 
 module.exports.renderEditForm = async (req, res) => {
