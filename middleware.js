@@ -19,17 +19,19 @@ module.exports.saveRedirectUrl = (req, res, next) => {
   next();
 };
 
-module.exports.isOwner =  async(req, res, next) => {
-    let { id } = req.params;
-    let listing = await Listing.findById(id);
-    if (!listing.owner[0]._id.equals(res.locals.currUser._id)) {
-      req.flash("error", "You don't have permission to do that!");
-      return res.redirect(`/listings/${id}`);
-    }
-    await Listing.findByIdAndUpdate(id, { ...req.body.listing });
-    res.redirect(`/listings/${id}`);
-    next();
+module.exports.isOwner = async (req, res, next) => {
+  let { id } = req.params;
+  let listing = await Listing.findById(id);
+
+  if (!listing.owner[0]._id.equals(res.locals.currUser._id)) {
+    req.flash("error", "You don't have permission to do that!");
+    return res.redirect(`/listings/${id}`);
   }
+
+  // ✅ If user is owner, proceed to controller
+  next();
+};
+
 
 module.exports.validateListing = (req, res, next) => {
   let { error } = listingSchema.validate(req.body);
