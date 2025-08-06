@@ -58,10 +58,6 @@ app.use((req, res, next) => {
 });
 
 
-app.get("/", (req, res) => {
-  res.send("Root is working.");
-});
-
 app.use("/listings", listings);
 app.use("/listings/:id/reviews", reviews);
 app.use("/", user);

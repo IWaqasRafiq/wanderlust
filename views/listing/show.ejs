@@ -1,4 +1,21 @@
 <%- layout('/layouts/boilerplate') %>
+<script>
+  const mapToken = "<%= process.env.MAP_TOKEN %>";
+const coordinates = <%- JSON.stringify(listing.geometry.coordinates) %>;
+
+    document.addEventListener("DOMContentLoaded", function () {
+    mapboxgl.accessToken = mapToken;
+
+    const map = new mapboxgl.Map({
+      container: 'map',
+      center: coordinates,
+      zoom: 9,
+    });
+
+    new mapboxgl.Marker().setLngLat(coordinates).addTo(map);
+    
+  });
+</script>
 
 <div class="row mt-3">
   <div class="col-8 offset-2">
@@ -105,3 +122,9 @@
     <% } %>
   </div>
 </div>
+<div class="col-8 offset-2">
+  <h3>Where you'll be</h3>
+  <div id="map"></div>
+</div>
+
+<script src="../js/map.js"></script>

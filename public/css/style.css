@@ -94,3 +94,8 @@ body{
 .btns{
     display: flex;
 }
+
+#map{
+    width: 600px;
+    height: 60vh;
+}
