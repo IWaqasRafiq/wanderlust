@@ -11,6 +11,9 @@ body{
     height: 5rem;
     background-color: white;
 }
+.navbar-nav{
+  justify-content: start !important;
+}
 .fa-compass{
     color: #fe424d;
     font-size: 2rem;

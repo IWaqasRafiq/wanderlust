@@ -1,4 +1,6 @@
-require('dotenv').config()
+if (process.env.NODE_ENV != "production") {
+  require("dotenv").config();
+}
 
 const express = require("express");
 const app = express();
@@ -15,6 +17,7 @@ const flash = require('connect-flash');
 const passport = require("passport");
 const LocalStrategy =  require('passport-local');
 const User = require('./models/user.js');
+const MongoStore = require('connect-mongo');
 app.use(express.json());
 
 app.set("view engine", "ejs");
@@ -24,12 +27,24 @@ app.use(express.urlencoded({ extended: true }));
 app.engine("ejs", ejsMate);
 app.use(express.static(path.join(__dirname, "/public")));
 
-const mongoUrl =
-  "mongodb+srv://wm66179:saifmalik28@cluster0.ti04esi.mongodb.net/crud?retryWrites=true&w=majority";
+const mongoUrl = process.env.MONGO_URI;
 mongoose.connect(mongoUrl);
 
+const store = MongoStore.create({
+  mongoUrl: mongoUrl,
+  crypto: {
+    secret: process.env.SECRET,
+  },
+  touchAfter: 24 * 2600,
+});
+
+store.on("error", () => {
+  console.log("ERROR in MONGO SESSION STORE", err);
+});
+
 const sessionOptions = {
-  secret: "thisisasecretkey",
+  store,
+  secret: process.env.SECRET,
   resave: false,
   saveUninitialized: false,
   cookie: {

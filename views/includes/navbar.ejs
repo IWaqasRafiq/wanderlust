@@ -15,10 +15,33 @@
       <div class="navbar-nav">
         <a class="nav-link" href="/listings">Explore</a>
       </div>
+      <div class="nav-search ms-auto nav-hovernav-search-search">
+        <form
+          class="d-flex"
+          role="search"
+          action="/listings/search"
+          method="get"
+          id="searchBox"
+        >
+          <input
+            class="form-control me-2 search-inp"
+            type="search"
+            placeholder="Search Location | Title | Price"
+            aria-label="Search"
+            name="q"
+            id="mySearchInput"
+          />
+          <button class="btn search-btn" type="submit" id="search">
+            <i class="fa-solid fa-magnifying-glass"></i>Search
+          </button>
+        </form>
+      </div>
       <div class="navbar-nav ms-auto">
         <a class="nav-link" href="/listings/new">Add New Listing</a>
         <% if (!currUser) { %>
-        <a class="nav-link" aria-current="page" href="/signup"><b> Sign up</b> </a>
+        <a class="nav-link" aria-current="page" href="/signup"
+          ><b> Sign up</b>
+        </a>
         <a class="nav-link" href="/login"><b>Login</b> </a>
         <% } %> <% if (currUser) { %>
         <a class="nav-link" href="/logout"> <b>Logout</b> </a>
